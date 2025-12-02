@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 전환율 개선 팀 프로젝트 평가지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .team-info {
+            background: #ecf0f1;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        
+        .team-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .team-info td {
+            padding: 10px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        
+        .team-info td:first-child {
+            font-weight: bold;
+            width: 150px;
+            color: #34495e;
+        }
+        
+        .evaluation-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            background: #3498db;
+            color: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .criteria-group {
+            margin-bottom: 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .criteria-header {
+            background: #34495e;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .criteria-weight {
+            background: #e74c3c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .criteria-item {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: white;
+        }
+        
+        .criteria-item:last-child {
+            border-bottom: none;
+        }
+        
+        .criteria-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .criteria-item ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .criteria-item li {
+            margin-bottom: 5px;
+        }
+        
+        .score-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .score-input label {
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 80px;
+        }
+        
+        .score-input input[type="number"] {
+            width: 100px;
+            padding: 8px 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .score-input .max-score {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .comment-box {
+            margin-top: 15px;
+        }
+        
+        .comment-box label {
+            display: block;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .comment-box textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-family: 'Malgun Gothic', sans-serif;
+            resize: vertical;
+        }
+        
+        .total-section {
+            background: #2ecc71;
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+        
+        .total-section h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        .total-score {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px;
+        }
+        
+        .total-score input {
+            width: 120px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background: white;
+            color: #2ecc71;
+        }
+        
+        .ai-check-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .ai-check-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .final-comments {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .final-comments h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .final-comments textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-family: 'Malgun Gothic', sans-serif;
+            resize: vertical;
+        }
+        
+        .evaluator-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .evaluator-section input {
+            padding: 10px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+                background: white;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GA4 전환율 개선 팀 프로젝트 평가지</h1>
+            <p class="subtitle">발표일: 2025년 12월 2일</p>
+        </div>
+        
+        <div class="team-info">
+            <table>
+                <tr>
+                    <td>팀명</td>
+                    <td><input type="text" style="width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 3px;"></td>
+                </tr>
+                <tr>
+                    <td>팀원</td>
+                    <td><input type="text" style="width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 3px;" placeholder="이름1, 이름2, 이름3"></td>
+                </tr>
+                <tr>
+                    <td>수행 유형</td>
+                    <td>
+                        <label style="margin-right: 20px;"><input type="radio" name="type" value="자유선택형"> 자유선택형</label>
+                        <label style="margin-right: 20px;"><input type="radio" name="type" value="데모사이트"> 데모사이트 활용형</label>
+                        <label><input type="radio" name="type" value="공통템플릿"> 공통 템플릿형</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>분석 사이트</td>
+                    <td><input type="text" style="width: 100%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 3px;"></td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- 평가 항목 1: 데이터 수집 및 설정 능력 (30%) -->
+        <div class="evaluation-section">
+            <div class="section-title">평가 영역</div>
+            
+            <div class="criteria-group">
+                <div class="criteria-header">
+                    <span>1. 데이터 수집 및 설정 능력</span>
+                    <span class="criteria-weight">배점: 30점</span>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>1-1. GTM 및 GA4 설정의 정확성 (15점)</h4>
+                    <ul>
+                        <li>GTM 컨테이너 설정이 올바르게 구성되었는가?</li>
+                        <li>GA4 속성 연결 및 데이터 스트림 설정이 적절한가?</li>
+                        <li>필요한 이벤트 태그가 누락 없이 설정되었는가?</li>
+                        <li>(데모사이트/공통템플릿형의 경우) 기존 설정에 대한 이해도</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="15" step="0.5">
+                        <span class="max-score">/ 15점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea placeholder="설정의 강점과 개선점을 구체적으로 기술해주세요."></textarea>
+                    </div>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>1-2. 이벤트 추적 및 전환 설정 (15점)</h4>
+                    <ul>
+                        <li>핵심 전환 이벤트(구매, 가입, 클릭 등)가 적절히 설정되었는가?</li>
+                        <li>맞춤 이벤트 파라미터가 의미있게 설계되었는가?</li>
+                        <li>이벤트 트리거 조건이 정확하게 작동하는가?</li>
+                        <li>전환 목표(Conversion)가 명확히 정의되었는가?</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="15" step="0.5">
+                        <span class="max-score">/ 15점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea placeholder="이벤트 설정의 완성도와 실용성을 평가해주세요."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 평가 항목 2: 분석력 및 인사이트 (40%) -->
+            <div class="criteria-group">
+                <div class="criteria-header">
+                    <span>2. 분석력 및 인사이트</span>
+                    <span class="criteria-weight">배점: 40점</span>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>2-1. 데이터 분석의 논리성 및 깊이 (20점)</h4>
+                    <ul>
+                        <li>전환율 계산이 정확하고 논리적인가?</li>
+                        <li>퍼널 분석(Funnel Analysis)을 적절히 활용했는가?</li>
+                        <li>세그먼트 분석(유저 그룹, 채널별 등)을 수행했는가?</li>
+                        <li>데이터 해석에 통계적 근거가 있는가?</li>
+                        <li>다양한 GA4 리포트(탐색 분석, 경로 분석 등)를 활용했는가?</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="20" step="0.5">
+                        <span class="max-score">/ 20점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea placeholder="분석 방법론과 데이터 해석의 수준을 평가해주세요."></textarea>
+                    </div>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>2-2. 핵심 인사이트 도출 (20점)</h4>
+                    <ul>
+                        <li><strong>고효율 매체</strong>를 명확히 식별했는가? (어떤 채널이 가장 효과적인가?)</li>
+                        <li><strong>고반응 유저</strong>를 발굴했는가? (어떤 사용자 그룹이 전환율이 높은가?)</li>
+                        <li><strong>고관여 행동</strong>을 파악했는가? (어떤 행동이 구매로 이어지는가?)</li>
+                        <li>발견한 인사이트가 실질적이고 구체적인가?</li>
+                        <li>시각자료(그래프, 표 등)로 인사이트를 명확히 표현했는가?</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="20" step="0.5">
+                        <span class="max-score">/ 20점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea placeholder="도출된 인사이트의 품질과 실용성을 평가해주세요."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 평가 항목 3: 개선 아이디어 제안 (30%) -->
+            <div class="criteria-group">
+                <div class="criteria-header">
+                    <span>3. 개선 아이디어 제안</span>
+                    <span class="criteria-weight">배점: 30점</span>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>3-1. 창의성 및 독창성 (10점)</h4>
+                    <ul>
+                        <li>제안된 아이디어가 참신하고 창의적인가?</li>
+                        <li>단순한 일반론을 넘어서 구체적인 해결책을 제시했는가?</li>
+                        <li>분석 결과와 연계된 맞춤형 제안인가?</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="10" step="0.5">
+                        <span class="max-score">/ 10점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea></textarea>
+                    </div>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>3-2. 실현 가능성 (10점)</h4>
+                    <ul>
+                        <li>제안된 개선 방안이 현실적으로 실행 가능한가?</li>
+                        <li>필요한 리소스와 예산을 고려했는가?</li>
+                        <li>구현 단계가 구체적으로 제시되었는가?</li>
+                        <li>A/B 테스트 등 검증 방법을 언급했는가?</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="10" step="0.5">
+                        <span class="max-score">/ 10점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea></textarea>
+                    </div>
+                </div>
+                
+                <div class="criteria-item">
+                    <h4>3-3. 전환율 개선 기대효과 (10점)</h4>
+                    <ul>
+                        <li>제안이 전환율 향상에 직접적으로 기여할 수 있는가?</li>
+                        <li>기대 효과를 정량적으로 추정했는가? (예: 전환율 X% 향상 예상)</li>
+                        <li>개선 전후 비교 시나리오를 제시했는가?</li>
+                        <li>우선순위가 명확히 정리되었는가?</li>
+                    </ul>
+                    <div class="score-input">
+                        <label>점수:</label>
+                        <input type="number" min="0" max="10" step="0.5">
+                        <span class="max-score">/ 10점</span>
+                    </div>
+                    <div class="comment-box">
+                        <label>세부 코멘트:</label>
+                        <textarea></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI 사용 검증 섹션 -->
+        <div class="ai-check-section">
+            <h3>⚠️ AI 사용 규칙 준수 여부 확인</h3>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox">
+                    <span>AI 사용 부분을 보고서에 명시했는가? (예: "AI-assisted proofreading")</span>
+                </label>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox">
+                    <span>핵심 분석 및 인사이트가 팀원의 자체적 해석인가? (AI 자동생성 아님)</span>
+                </label>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox">
+                    <span>전환율 계산 및 수치가 직접 작성되었는가? (AI 조작 없음)</span>
+                </label>
+            </div>
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox">
+                    <span>AI 출력물을 무비판적으로 복사하지 않았는가?</span>
+                </label>
+            </div>
+            <div class="comment-box" style="margin-top: 15px;">
+                <label style="color: #856404;">⚠️ AI 부적절 사용 발견 시 감점 사항:</label>
+                <textarea placeholder="AI 규칙 위반이 발견된 경우 구체적으로 기술하고 감점 내용을 명시해주세요."></textarea>
+            </div>
+        </div>
+        
+        <!-- 총점 계산 -->
+        <div class="total-section">
+            <h3>📊 최종 점수</h3>
+            <div class="total-score">
+                <span style="font-size: 24px;">총점:</span>
+                <input type="number" min="0" max="100" step="0.5">
+                <span style="font-size: 24px;">/ 100점</span>
+            </div>
+        </div>
+        
+        <!-- 종합 의견 -->
+        <div class="final-comments">
+            <h3>💬 종합 평가 의견</h3>
+            <textarea placeholder="팀의 전반적인 성과, 우수한 점, 개선이 필요한 점, 향후 발전 방향 등을 종합적으로 작성해주세요."></textarea>
+        </div>
+        
+        <!-- 발표 평가 (선택 사항) -->
+        <div class="final-comments" style="background: #e8f4f8; border-left-color: #3498db;">
+            <h3>🎤 발표 평가 (선택 사항)</h3>
+            <ul style="margin-bottom: 15px; color: #555;">
+                <li>발표 시간 준수 (10분)</li>
+                <li>발표 자료의 완성도 및 시각화</li>
+                <li>발표 내용의 명확성 및 논리성</li>
+                <li>질의응답 대응 능력</li>
+            </ul>
+            <textarea placeholder="발표에 대한 피드백을 작성해주세요."></textarea>
+        </div>
+        
+        <!-- 평가자 정보 -->
+        <div class="evaluator-section">
+            <div>
+                <strong>평가자:</strong>
+                <input type="text" placeholder="이름" style="margin-left: 10px;">
+            </div>
+            <div>
+                <strong>평가일:</strong>
+                <input type="date" value="2025-12-02" style="margin-left: 10px;">
+            </div>
+        </div>
+    </div>
+
+<!-- Firebase + 저장 기능 추가 V2 -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDer9pSzAKWG8be6NUXbEPgPllV56tlc-8",
+  authDomain: "ga4-project-grading.firebaseapp.com",
+  databaseURL: "https://ga4-project-grading-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ga4-project-grading",
+  storageBucket: "ga4-project-grading.firebasestorage.app",
+  messagingSenderId: "242316985266",
+  appId: "1:242316985266:web:7b0d00ccd5850a09261aab",
+  measurementId: "G-L953LDJXV3"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.saveEvaluation = function(){
+    const qs = sel => document.querySelector(sel);
+    const qsa = sel => [...document.querySelectorAll(sel)];
+    const num = sel => qsa(sel).map(x=>Number(x.value||0));
+    const txt = sel => qsa(sel).map(x=>x.value||"");
+    const chk = sel => qsa(sel).map(x=>x.checked);
+
+    const data = {
+        teamName: txt(".team-info input[type='text']")[0],
+        members: txt(".team-info input[type='text']")[1],
+        type: qs("input[name='type']:checked")?.value || "",
+        site: txt(".team-info input[type='text']")[2],
+        scores: num(".score-input input"),
+        comments: txt(".comment-box textarea"),
+        aiChecks: chk(".ai-check-section input[type='checkbox']"),
+        aiComment: txt(".ai-check-section textarea"),
+        totalScore: qs(".total-section input")?.value || "",
+        finalComment: txt(".final-comments textarea")[0],
+        presentationComment: txt(".final-comments textarea")[1],
+        evaluator: txt(".evaluator-section input[type='text']")[0],
+        evalDate: txt(".evaluator-section input[type='date']")[0],
+        savedAt: new Date().toISOString()
+    };
+
+    const r = ref(db,"ga4_evaluations");
+    set(push(r),data).then(()=>alert("저장 완료!")).catch(e=>alert(e));
+};
+
+// 자동 합산
+document.querySelectorAll(".score-input input").forEach(inp=>{
+  inp.addEventListener("input", ()=>{
+    let sum = 0;
+    document.querySelectorAll(".score-input input").forEach(x=>{
+        sum += Number(x.value||0);
+    });
+    const total = document.querySelector(".total-section input");
+    if(total) total.value = sum;
+  });
+});
+</script>
+
+<div style="text-align:center; margin-top:50px;">
+  <button onclick="saveEvaluation()" 
+    style="padding:15px 40px; background:#27ae60; color:white; font-size:18px; border:0; border-radius:8px; cursor:pointer;">
+    💾 평가 저장
+  </button>
+</div>
+
+</body>
+</html>
