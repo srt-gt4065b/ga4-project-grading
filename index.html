@@ -297,6 +297,73 @@
     </style>
 </head>
 <body>
+    <!-- 🔐 로그인 오버레이 -->
+<div id="loginOverlay" 
+     style="
+       position: fixed;
+       inset: 0;
+       background: rgba(0,0,0,0.9);
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       flex-direction: column;
+       z-index: 9999;
+       color: white;
+       font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+     ">
+  
+  <h2 style="font-size: 24px; margin-bottom: 20px;">ADMIN LOGIN</h2>
+
+  <input id="passwordInput"
+         type="password"
+         placeholder="Enter Password"
+         style="
+           padding: 12px 16px;
+           width: 240px;
+           border-radius: 10px;
+           border: none;
+           margin-bottom: 10px;
+           font-size: 16px;
+         " />
+
+  <button onclick="checkPassword()" 
+          style="
+            padding: 10px 20px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+          ">
+    🔑 로그인
+  </button>
+
+  <p id="loginError" style="color: #f87171; margin-top: 12px; display: none;">
+    비밀번호가 올바르지 않습니다.
+  </p>
+</div>
+
+<script>
+  const ADMIN_PASSWORD = "1016";
+
+  function checkPassword() {
+    const input = document.getElementById("passwordInput").value.trim();
+    const error = document.getElementById("loginError");
+
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById("loginOverlay").style.display = "none";
+    } else {
+      error.style.display = "block";
+    }
+  }
+
+  // Enter key 지원
+  document.getElementById("passwordInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") checkPassword();
+  });
+</script>
+
     <div class="container">
         <div class="header">
             <h1>GA4 전환율 개선 팀 프로젝트 평가지</h1>
