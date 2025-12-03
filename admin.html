@@ -2,247 +2,366 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>GA4 프로젝트 평가 · 팀별 점수 요약 ADMIN</title>
+  <title>팀별 점수 요약 · ADMIN</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind -->
+  <!-- TailwindCSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-        "Malgun Gothic", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     }
   </style>
 </head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center px-4">
 
-<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
-
-<div class="w-full max-w-5xl">
+<div class="w-full max-w-6xl">
   <div class="bg-slate-800/90 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
 
     <!-- 헤더 -->
-    <div class="px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+    <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between gap-3">
       <div>
-        <h1 class="text-xl font-bold">GA4 프로젝트 팀별 점수 요약</h1>
-        <p class="text-sm text-slate-400 mt-1">관리자 로그인 후 팀별 총점 / 평균 / 팀원 보기</p>
+        <h1 class="text-xl md:text-2xl font-bold">팀별 점수 요약 · ADMIN</h1>
+        <p class="text-sm text-slate-400 mt-1">
+          비밀번호를 입력하면 팀별 총점 / 평균 / 최고점 순위를 확인할 수 있습니다.
+        </p>
       </div>
-      <span id="login-badge"
-            class="text-xs px-3 py-1 rounded-full border border-amber-400/50 text-amber-300 bg-amber-500/10">
-        🔒 잠금
+      <span id="login-status-badge"
+            class="text-xs px-3 py-1 rounded-full border border-amber-400/60 text-amber-300 bg-amber-500/10">
+        🔒 어드민 잠금
       </span>
     </div>
 
-    <!-- 로그인 섹션 -->
-    <div id="login-section" class="px-6 py-5 flex flex-col md:flex-row gap-3">
-      <input
-        id="admin-password"
-        placeholder="관리자 비밀번호 입력"
-        type="password"
-        class="flex-1 rounded-xl px-3 py-2 bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
-      />
+    <!-- 로그인 영역 -->
+    <div id="login-section" class="px-6 py-5 flex flex-col md:flex-row items-center gap-3">
+      <div class="flex-1 w-full">
+        <label for="admin-password" class="block text-xs mb-1 text-slate-300">
+          어드민 비밀번호
+        </label>
+        <input
+          id="admin-password"
+          type="password"
+          placeholder="비밀번호를 입력하세요 (4자리 숫자)"
+          class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+        />
+      </div>
       <button
         id="login-button"
-        class="px-5 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-sm font-semibold"
+        class="w-full md:w-auto whitespace-nowrap inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-600 px-5 py-2.5 text-sm font-semibold transition-colors"
       >
         🔑 로그인
       </button>
     </div>
 
-    <!-- 로그인 오류 -->
-    <p id="login-error" class="px-6 pb-3 text-xs text-red-400 hidden">
-      비밀번호가 틀렸습니다.
+    <!-- 로그인 에러 -->
+    <p id="login-error"
+       class="px-6 pb-3 text-xs text-red-400 hidden">
+      비밀번호가 올바르지 않습니다. 다시 입력해주세요.
     </p>
 
     <div class="border-t border-slate-700"></div>
 
-    <!-- 어드민 콘텐츠 -->
-    <div id="admin-section" class="px-6 py-6 hidden">
+    <!-- 어드민 본문 -->
+    <div id="admin-section" class="px-4 md:px-6 py-5 hidden">
 
       <!-- 요약 카드 -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-        <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-4">
+        <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
           <p class="text-xs text-slate-400 mb-1">총 팀 수</p>
-          <p id="sum-teams" class="text-2xl font-bold">-</p>
+          <p id="summary-team-count" class="text-2xl font-bold">-</p>
         </div>
-
-        <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-4">
+        <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
           <p class="text-xs text-slate-400 mb-1">전체 평균 점수</p>
-          <p id="sum-avg" class="text-2xl font-bold">-</p>
+          <p id="summary-global-avg" class="text-2xl font-bold">-</p>
         </div>
-
-        <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-4">
-          <p class="text-xs text-slate-400 mb-1">평가 기록 수</p>
-          <p id="sum-count" class="text-2xl font-bold">-</p>
+        <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
+          <p class="text-xs text-slate-400 mb-1">전체 기록 수</p>
+          <p id="summary-record-count" class="text-2xl font-bold">-</p>
         </div>
       </div>
 
-      <!-- 새로고침 -->
-      <div class="flex justify-between items-center mb-4 text-xs text-slate-400">
-        <span id="data-status">데이터 불러오는 중...</span>
-        <button id="reload-btn"
-          class="px-3 py-1.5 rounded-lg border border-slate-600 hover:bg-slate-700/70">
-          🔄 새로고침
+      <!-- 상태 / 새로고침 -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span id="data-status-text">데이터 로딩 대기 중…</span>
+        </div>
+        <button
+          id="reload-button"
+          class="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-3 py-1.5 text-xs text-slate-100 hover:bg-slate-700/80 transition-colors"
+        >
+          🔄 데이터 새로고침
         </button>
       </div>
 
-      <!-- 테이블 -->
-      <div class="overflow-x-auto border border-slate-700 rounded-xl">
-        <table class="min-w-full text-sm divide-y divide-slate-700">
-          <thead class="bg-slate-900/70">
+      <!-- 팀별 요약 테이블 -->
+      <div class="overflow-x-auto rounded-xl border border-slate-700 bg-slate-900/40">
+        <table class="min-w-full divide-y divide-slate-700 text-sm">
+          <thead class="bg-slate-900/80">
             <tr>
-              <th class="px-4 py-2 text-left text-xs text-slate-300">순위</th>
-              <th class="px-4 py-2 text-left text-xs text-slate-300">팀명</th>
-              <th class="px-4 py-2 text-left text-xs text-slate-300">팀원</th>
-              <th class="px-4 py-2 text-right text-xs text-slate-300">총점</th>
-              <th class="px-4 py-2 text-right text-xs text-slate-300">평균</th>
-              <th class="px-4 py-2 text-right text-xs text-slate-300">최고점</th>
+              <th class="px-4 py-2 text-left text-xs font-semibold text-slate-300">순위</th>
+              <th class="px-4 py-2 text-left text-xs font-semibold text-slate-300">팀명</th>
+              <th class="px-4 py-2 text-left text-xs font-semibold text-slate-300">팀원</th>
+              <th class="px-4 py-2 text-right text-xs font-semibold text-slate-300">총점</th>
+              <th class="px-4 py-2 text-right text-xs font-semibold text-slate-300">평균 점수</th>
+              <th class="px-4 py-2 text-right text-xs font-semibold text-slate-300">최고 점수</th>
             </tr>
           </thead>
-          <tbody id="team-body" class="divide-y divide-slate-800">
+          <tbody id="team-summary-body" class="divide-y divide-slate-800">
+            <!-- JS에서 채워짐 -->
           </tbody>
         </table>
       </div>
 
+      <p class="mt-4 text-xs text-slate-400">
+        ⚙️ 데이터 출처:
+        <code class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[11px]">
+          /ga4_evaluations
+        </code>
+        의 <code>teamName</code>, <code>totalScore</code>, <code>comments.members</code> 필드를 사용합니다.
+      </p>
     </div>
   </div>
 </div>
 
 <script>
-  // -------------------------------
-  // 기본 설정
-  // -------------------------------
-  const ADMIN_PASS = "1016";
+  // =========================
+  // 설정
+  // =========================
+  const ADMIN_PASSWORD = "1016";
+
   const DB_URL =
     "https://ga4-project-grading-default-rtdb.asia-southeast1.firebasedatabase.app/ga4_evaluations.json";
 
   const loginSection = document.getElementById("login-section");
-  const adminSection = document.getElementById("admin-section");
-  const loginButton = document.getElementById("login-button");
   const loginError = document.getElementById("login-error");
-  const loginBadge = document.getElementById("login-badge");
-  const passInput = document.getElementById("admin-password");
+  const loginButton = document.getElementById("login-button");
+  const passwordInput = document.getElementById("admin-password");
+  const adminSection = document.getElementById("admin-section");
+  const loginStatusBadge = document.getElementById("login-status-badge");
 
-  const dataStatus = document.getElementById("data-status");
-  const reloadBtn = document.getElementById("reload-btn");
+  const summaryTeamCount = document.getElementById("summary-team-count");
+  const summaryGlobalAvg = document.getElementById("summary-global-avg");
+  const summaryRecordCount = document.getElementById("summary-record-count");
+  const dataStatusText = document.getElementById("data-status-text");
+  const reloadButton = document.getElementById("reload-button");
+  const teamSummaryBody = document.getElementById("team-summary-body");
 
-  const teamBody = document.getElementById("team-body");
+  let rawRows = [];
 
-  const sumTeams = document.getElementById("sum-teams");
-  const sumAvg = document.getElementById("sum-avg");
-  const sumCount = document.getElementById("sum-count");
-
-  // -------------------------------
+  // =========================
   // 로그인 처리
-  // -------------------------------
+  // =========================
   function handleLogin() {
-    if (passInput.value.trim() === ADMIN_PASS) {
+    const value = passwordInput.value.trim();
+    if (value === ADMIN_PASSWORD) {
+      loginError.classList.add("hidden");
       loginSection.classList.add("hidden");
       adminSection.classList.remove("hidden");
-      loginBadge.textContent = "🟢 로그인됨";
-      loginBadge.className =
-        "text-xs px-3 py-1 rounded-full border border-emerald-400 text-emerald-300 bg-emerald-500/10";
+      loginStatusBadge.textContent = "✅ 어드민 로그인 완료";
+      loginStatusBadge.className =
+        "text-xs px-3 py-1 rounded-full border border-emerald-400/60 text-emerald-300 bg-emerald-500/10";
 
-      loadData();
+      loadDataFromFirebase();
     } else {
       loginError.classList.remove("hidden");
+      passwordInput.focus();
     }
   }
 
   loginButton.addEventListener("click", handleLogin);
-  passInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleLogin();
+  passwordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
   });
 
-  // -------------------------------
-  // Firebase 데이터 불러오기
-  // -------------------------------
-  async function loadData() {
+  // =========================
+  // 유틸: 팀원 문자열 → 배열
+  // =========================
+  function parseMembers(str) {
+    if (!str) return [];
+    return str
+      .split(/[,\n]/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+  }
+
+  // =========================
+  // Firebase에서 데이터 읽기
+  // =========================
+  async function loadDataFromFirebase() {
     try {
-      dataStatus.textContent = "Firebase에서 데이터 불러오는 중...";
+      dataStatusText.textContent = "Firebase에서 데이터 불러오는 중…";
 
-      const res = await fetch(DB_URL);
-      const json = await res.json();
+      const response = await fetch(DB_URL);
+      const data = await response.json();
 
-      if (!json) {
-        dataStatus.textContent = "데이터 없음";
+      if (!data) {
+        dataStatusText.textContent = "Firebase에 데이터가 없습니다.";
+        rawRows = [];
+        renderAll();
         return;
       }
 
-      // 데이터 변환
-      const rows = Object.values(json).map((item) => ({
-        team: item?.scores?.teamName || "팀 미지정",
-        score: Number(item?.scores?.totalScore || 0),
-        members: item?.members || "",
-      }));
+      // 각 평가 레코드를 한 줄로 변환
+      const rows = Object.values(data).map((item) => {
+        const teamName =
+          item?.teamName ||
+          item?.scores?.teamName ||
+          item?.comments?.teamName ||
+          "팀 미지정";
 
-      render(rows);
+        // totalScore는 문자열 "80" 형태 → 숫자 변환
+        let scoreRaw =
+          item?.totalScore ||
+          item?.scores?.totalScore ||
+          item?.comments?.totalScore ||
+          0;
+        const score = Number(scoreRaw) || 0;
 
-      dataStatus.textContent = `총 ${rows.length}개 평가 기록 불러옴`;
+        const membersStr =
+          (item?.comments && item.comments.members) ||
+          item?.members ||
+          "";
+        const membersArr = parseMembers(membersStr);
 
+        return {
+          team: teamName,
+          score: score,
+          membersText: membersStr,
+          membersCount: membersArr.length,
+        };
+      });
+
+      rawRows = rows;
+
+      dataStatusText.textContent = `Firebase에서 ${rows.length}개의 기록을 불러왔습니다.`;
+      renderAll();
     } catch (err) {
       console.error(err);
-      dataStatus.textContent = "데이터 불러오기 오류";
+      dataStatusText.textContent =
+        "Firebase에서 데이터를 불러오지 못했습니다.";
     }
   }
 
-  // -------------------------------
-  // 렌더링
-  // -------------------------------
-  function render(rows) {
-    // 팀별 집계
+  // =========================
+  // 집계 로직
+  // =========================
+  function aggregateByTeam(rows) {
     const teamMap = {};
 
-    rows.forEach((item) => {
-      if (!teamMap[item.team]) {
-        teamMap[item.team] = {
-          team: item.team,
-          members: item.members,
+    rows.forEach((row) => {
+      const teamName = row.team || "팀 미지정";
+      if (!teamMap[teamName]) {
+        teamMap[teamName] = {
+          team: teamName,
           total: 0,
           count: 0,
           max: 0,
+          membersText: row.membersText,
+          membersCount: row.membersCount,
         };
       }
 
-      teamMap[item.team].total += item.score;
-      teamMap[item.team].count += 1;
-      teamMap[item.team].max = Math.max(teamMap[item.team].max, item.score);
+      teamMap[teamName].total += row.score;
+      teamMap[teamName].count += 1;
+      if (row.score > teamMap[teamName].max) {
+        teamMap[teamName].max = row.score;
+      }
+
+      // 팀원 정보가 비어있을 경우 첫 번째 유효 값으로 채움
+      if (!teamMap[teamName].membersText && row.membersText) {
+        teamMap[teamName].membersText = row.membersText;
+        teamMap[teamName].membersCount = row.membersCount;
+      }
     });
 
-    const teams = Object.values(teamMap).map((t) => ({
+    const list = Object.values(teamMap).map((t) => ({
       ...t,
-      avg: t.total / t.count,
+      avg: t.count > 0 ? t.total / t.count : 0,
     }));
 
-    teams.sort((a, b) => b.total - a.total);
+    // 총점 기준 내림차순 정렬
+    list.sort((a, b) => b.total - a.total);
+    return list;
+  }
 
-    // 요약 카드
-    sumTeams.textContent = teams.length;
-    sumCount.textContent = rows.length;
-    sumAvg.textContent =
-      rows.length > 0
-        ? (rows.reduce((a, b) => a + b.score, 0) / rows.length).toFixed(1)
-        : "-";
+  // =========================
+  // 렌더링
+  // =========================
+  function renderSummaryCards(rows) {
+    const teamList = aggregateByTeam(rows);
 
-    // 테이블 렌더링
-    teamBody.innerHTML = "";
+    summaryTeamCount.textContent = teamList.length.toString();
+    summaryRecordCount.textContent = rows.length.toString();
 
-    teams.forEach((t, i) => {
-      const tr = document.createElement("tr");
+    if (rows.length === 0) {
+      summaryGlobalAvg.textContent = "-";
+    } else {
+      const totalScore = rows.reduce((sum, r) => sum + (r.score || 0), 0);
+      const globalAvg = totalScore / rows.length;
+      summaryGlobalAvg.textContent = globalAvg.toFixed(1);
+    }
+  }
 
-      tr.innerHTML = `
-        <td class="px-4 py-2">${i + 1}</td>
-        <td class="px-4 py-2 font-semibold">${t.team}</td>
-        <td class="px-4 py-2">${t.members}</td>
-        <td class="px-4 py-2 text-right">${t.total}</td>
-        <td class="px-4 py-2 text-right">${t.avg.toFixed(1)}</td>
-        <td class="px-4 py-2 text-right">${t.max}</td>
+  function renderTeamTable(rows) {
+    const teamList = aggregateByTeam(rows);
+    teamSummaryBody.innerHTML = "";
+
+    if (teamList.length === 0) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td colspan="6" class="px-4 py-4 text-center text-xs text-slate-400">
+          표시할 팀 데이터가 없습니다.
+        </td>
       `;
+      teamSummaryBody.appendChild(row);
+      return;
+    }
 
-      teamBody.appendChild(tr);
+    teamList.forEach((team, index) => {
+      const row = document.createElement("tr");
+
+      let rankBadgeClass = "bg-slate-800/80 text-slate-200";
+      if (index === 0) rankBadgeClass = "bg-yellow-500/20 text-yellow-300";
+      else if (index === 1) rankBadgeClass = "bg-sky-500/20 text-sky-300";
+      else if (index === 2) rankBadgeClass = "bg-emerald-500/20 text-emerald-300";
+
+      row.innerHTML = `
+        <td class="px-4 py-2 text-xs">
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded-full ${rankBadgeClass} font-semibold">
+            ${index + 1}
+          </span>
+        </td>
+        <td class="px-4 py-2 text-sm font-semibold text-slate-100">
+          ${team.team}
+        </td>
+        <td class="px-4 py-2 text-xs text-slate-200">
+          ${team.membersText || ""}
+        </td>
+        <td class="px-4 py-2 text-right text-sm text-slate-200">
+          ${team.total}
+        </td>
+        <td class="px-4 py-2 text-right text-sm text-slate-200">
+          ${team.avg.toFixed(1)}
+        </td>
+        <td class="px-4 py-2 text-right text-sm text-slate-200">
+          ${team.max}
+        </td>
+      `;
+      teamSummaryBody.appendChild(row);
     });
   }
 
-  reloadBtn.addEventListener("click", loadData);
+  function renderAll() {
+    renderSummaryCards(rawRows);
+    renderTeamTable(rawRows);
+  }
+
+  // 새로고침 버튼
+  reloadButton.addEventListener("click", loadDataFromFirebase);
 </script>
 </body>
 </html>
